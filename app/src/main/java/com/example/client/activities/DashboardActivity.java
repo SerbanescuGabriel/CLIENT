@@ -24,7 +24,7 @@ import com.example.client.viewmodels.UserProfileViewModel;
 public class DashboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private static final String UID_KEY = "userId";
+    public static final String UID_KEY = "userId";
     private UserProfileViewModel userProfileViewModel;
 
     @Override
