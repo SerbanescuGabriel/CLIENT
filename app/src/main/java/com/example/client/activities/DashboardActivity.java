@@ -1,8 +1,12 @@
 package com.example.client.activities;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,13 +18,36 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.client.R;
+import com.example.client.entitymodels.user.User;
+import com.example.client.viewmodels.UserProfileViewModel;
 
 public class DashboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private static final String UID_KEY = "userId";
+    private UserProfileViewModel userProfileViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Bundle userBundle = getIntent().getExtras();
+        int userId = -1;
+        if(userBundle!=null){
+            userId = userBundle.getInt(UID_KEY);
+        }
+
+        userProfileViewModel = ViewModelProviders.of(this).get(UserProfileViewModel.class);
+        userProfileViewModel.init(userId);
+
+        userProfileViewModel.getUser().observe(this, new Observer<User>() {
+            @Override
+            public void onChanged(@Nullable User user) {
+                //Update ui
+                Log.i("GetUser", user.getUserName().toString());
+            }
+        });
+
         setContentView(R.layout.activity_dashboard);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -100,4 +127,5 @@ public class DashboardActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 }

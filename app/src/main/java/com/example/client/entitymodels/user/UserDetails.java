@@ -1,12 +1,22 @@
 package com.example.client.entitymodels.user;
 
 public class UserDetails {
-    public long UserDetailId;
-    public String FirstName;
-    public String LastName;
-    public int Age;
-    public boolean Sex;
-    public String ProfilePicture;
+    private long UserDetailId;
+    private String FirstName;
+    private String LastName;
+    private int Age;
+    private boolean Sex;
+    private String ProfilePicture;
+
+
+    public UserDetails() {
+        UserDetailId=10;
+        FirstName="";
+        LastName="";
+        Age=0;
+        Sex=true;
+        ProfilePicture="";
+    }
 
     public long getUserDetailId() {
         return UserDetailId;

@@ -8,6 +8,15 @@ public class User {
 
     private UserDetails userDetails;
 
+
+    public User() {
+        userId=1;
+        userName="test";
+        password="test";
+        email="test";
+        userDetails=new UserDetails();
+    }
+
     public long getUserId() {
         return userId;
     }
