@@ -10,13 +10,19 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.client.R;
+import com.example.client.components.DaggerUserRepositoryComponent;
+import com.example.client.components.UserRepositoryComponent;
+import com.example.client.repositories.UserRepository;
 import com.example.client.webservices.userWebservice.UserWebservice;
+
+import javax.inject.Inject;
 
 public class LoginActivity extends AppCompatActivity {
 
     private Button btnLogin,btnRegister;
     private EditText etUsername, etPassword;
     private UserWebservice userWebservice;
+    @Inject public UserRepository userRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +34,8 @@ public class LoginActivity extends AppCompatActivity {
         etUsername = findViewById(R.id.etUsername);
         etPassword = findViewById(R.id.etPassword);
 
-        userWebservice = new UserWebservice();
+        UserRepositoryComponent component = DaggerUserRepositoryComponent.create();
+        component.getUserRepositoryLoginActivity(this);
 
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -42,9 +49,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(LoginActivity.this, DashboardActivity.class);
-                int userId = userWebservice.Login(etUsername.getText().toString(), etPassword.getText().toString());
-                Log.i("userId", Integer.toString(userId));
-                intent.putExtra(DashboardActivity.UID_KEY, userId);
+                userRepository.TestLogin();
                 startActivity(intent);
             }
         });
