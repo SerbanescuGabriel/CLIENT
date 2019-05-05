@@ -1,6 +1,18 @@
 package com.example.client.entitymodels.user;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.PrimaryKey;
+
+import com.google.gson.annotations.SerializedName;
+
+@Entity(foreignKeys = @ForeignKey(entity = User.class,
+        parentColumns = "userId",
+        childColumns = "UserDetailId",
+        onDelete = ForeignKey.NO_ACTION))
 public class UserDetails {
+
+    @PrimaryKey
     private long UserDetailId;
     private String FirstName;
     private String LastName;

@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.client.R;
 import com.example.client.components.DaggerUserRepositoryComponent;
@@ -22,6 +23,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button btnLogin,btnRegister;
     private EditText etUsername, etPassword;
     private UserWebservice userWebservice;
+
     @Inject public UserRepository userRepository;
 
     @Override
@@ -34,7 +36,7 @@ public class LoginActivity extends AppCompatActivity {
         etUsername = findViewById(R.id.etUsername);
         etPassword = findViewById(R.id.etPassword);
 
-        UserRepositoryComponent component = DaggerUserRepositoryComponent.create();
+        UserRepositoryComponent component = DaggerUserRepositoryComponent.builder().build();
         component.getUserRepositoryLoginActivity(this);
 
         btnRegister.setOnClickListener(new View.OnClickListener() {
@@ -48,9 +50,10 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(LoginActivity.this, DashboardActivity.class);
-                userRepository.TestLogin();
-                startActivity(intent);
+                //Intent intent=new Intent(LoginActivity.this, DashboardActivity.class);
+                //Log.i("LoginResult", Integer.toString(userRepository.Login(etUsername.getText().toString(), etPassword.getText().toString())));
+                userRepository.Login(etUsername.getText().toString(), etPassword.getText().toString());
+                //startActivity(intent);
             }
         });
 

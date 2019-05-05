@@ -1,13 +1,38 @@
 package com.example.client.entitymodels.user;
 
+import android.arch.persistence.room.Embedded;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+
+import com.google.gson.annotations.SerializedName;
+
+@Entity(tableName = "User")
 public class User {
+
+    @PrimaryKey
+    @SerializedName("UserId")
     private long userId;
+
+    @SerializedName("Username")
     private String userName;
+
+    @SerializedName("Password")
     private String password;
+
+    @SerializedName("Email")
     private String email;
 
+    @SerializedName("UserDetails")
+    @Embedded
     private UserDetails userDetails;
 
+    public User(long userId, String userName, String password, String email, UserDetails userDetails) {
+        this.userId = userId;
+        this.userName = userName;
+        this.password = password;
+        this.email = email;
+        this.userDetails = userDetails;
+    }
 
     public User() {
         userId=1;
@@ -55,5 +80,16 @@ public class User {
 
     public void setUserDetails(UserDetails userDetails) {
         this.userDetails = userDetails;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userId=" + userId +
+                ", userName='" + userName + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", userDetails=" + userDetails +
+                '}';
     }
 }
