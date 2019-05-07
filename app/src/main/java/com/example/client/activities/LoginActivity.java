@@ -13,7 +13,14 @@ import android.widget.Toast;
 import com.example.client.R;
 import com.example.client.entitymodels.user.User;
 import com.example.client.webservices.IUserWebservice;
+import com.example.client.webservices.Messages;
 import com.example.client.webservices.RetrofitSingleton;
+import com.google.gson.JsonObject;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 
 import javax.inject.Inject;
 
@@ -38,6 +45,8 @@ public class LoginActivity extends AppCompatActivity {
         etPassword = findViewById(R.id.etPassword);
         userWebservice = RetrofitSingleton.getInstance().create(IUserWebservice.class);
 
+
+
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,6 +67,24 @@ public class LoginActivity extends AppCompatActivity {
                         if(response.isSuccessful()){
                             user = response.body();
                         }
+                        else{
+
+                            if(response.code()==400){
+                                JSONObject jsonObject=null;
+                                try {
+                                    jsonObject=new JSONObject(response.errorBody().string());
+                                    String content=jsonObject.getString("Message");
+
+                                    if(content.equals(Messages.Error_InvalidCredentials)){
+                                        Toast.makeText(getApplicationContext(),content,Toast.LENGTH_LONG).show();
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
 
                         if(user.getUserId() > 0){
                             Intent intent=new Intent(LoginActivity.this, DashboardActivity.class);
@@ -72,6 +99,5 @@ public class LoginActivity extends AppCompatActivity {
                 });
             }
         });
-
     }
 }

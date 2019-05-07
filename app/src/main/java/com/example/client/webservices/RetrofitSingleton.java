@@ -8,8 +8,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitSingleton {
     private static Retrofit instance;
-    private static final String BASE_URL="http://10.0.2.2:49807/api/";
-    //private final String BASE_URL="http://localhost:49807/"; //iulia
+    //private static final String BASE_URL="http://10.0.2.2:49807/api/";
+    private static String BASE_URL="http://10.0.2.2:49800/api/"; //iulia
 
     public static synchronized Retrofit getInstance(){
         if(instance == null){
