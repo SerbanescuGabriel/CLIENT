@@ -2,11 +2,13 @@ package com.example.client.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -30,27 +32,47 @@ import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private Button btnLogin,btnRegister;
+    private Button btnLogin, btnRegister;
     private EditText etUsername, etPassword;
     private IUserWebservice userWebservice;
+    private int id, idSP;
+    private CheckBox cbKeepLoggedIn;
+    SharedPreferences sp;
+    SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        btnLogin=findViewById(R.id.btnLogin);
-        btnRegister=findViewById(R.id.btnRegister);
+        btnLogin = findViewById(R.id.btnLogin);
+        btnRegister = findViewById(R.id.btnRegister);
         etUsername = findViewById(R.id.etUsername);
         etPassword = findViewById(R.id.etPassword);
+        cbKeepLoggedIn=findViewById(R.id.cbKeepLoggedIn);
         userWebservice = RetrofitSingleton.getInstance().create(IUserWebservice.class);
 
 
+        //save default value in SP
+        id = 0;
+        //idSP = 0;
+        sp = getSharedPreferences("userId", MODE_PRIVATE);
+        editor = sp.edit();
+        editor.putInt("userId", id);
+        editor.commit();
+
+        //retrieve value from SP
+        sp = getSharedPreferences("userId", MODE_PRIVATE);
+        idSP=sp.getInt("userId", MODE_PRIVATE);
+
+        if (idSP != id) {
+            goDirectlyToDashboard(idSP);
+        }
 
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(LoginActivity.this, RegisterActivity.class);
+                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(intent);
             }
         });
@@ -64,19 +86,27 @@ public class LoginActivity extends AppCompatActivity {
 
                         User user = new User();
 
-                        if(response.isSuccessful()){
+
+                        if (response.isSuccessful()) {
                             user = response.body();
-                        }
-                        else{
+                            Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
+                            intent.putExtra("user", user);
+                            startActivity(intent);
+                            if((cbKeepLoggedIn.isChecked())) {
+                                id = (int) user.getUserId();
+                                editor.putInt("userId", id);
+                                editor.commit();
+                            }
+                        } else {
 
-                            if(response.code()==400){
-                                JSONObject jsonObject=null;
+                            if (response.code() == 400) {
+                                JSONObject jsonObject = null;
                                 try {
-                                    jsonObject=new JSONObject(response.errorBody().string());
-                                    String content=jsonObject.getString("Message");
+                                    jsonObject = new JSONObject(response.errorBody().string());
+                                    String content = jsonObject.getString("Message");
 
-                                    if(content.equals(Messages.Error_InvalidCredentials)){
-                                        Toast.makeText(getApplicationContext(),content,Toast.LENGTH_LONG).show();
+                                    if (content.equals(Messages.Error_InvalidCredentials)) {
+                                        Toast.makeText(getApplicationContext(), content, Toast.LENGTH_LONG).show();
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -84,11 +114,6 @@ public class LoginActivity extends AppCompatActivity {
                                     e.printStackTrace();
                                 }
                             }
-                        }
-
-                        if(user.getUserId() > 0){
-                            Intent intent=new Intent(LoginActivity.this, DashboardActivity.class);
-                            startActivity(intent);
                         }
                     }
 
@@ -99,5 +124,36 @@ public class LoginActivity extends AppCompatActivity {
                 });
             }
         });
+
+
+
     }
+
+    private void goDirectlyToDashboard(int id) {
+
+        userWebservice.getUserById(id).enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+
+                User u = new User();
+                if (response.isSuccessful()) {
+                    u=response.body();
+                    Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
+                    intent.putExtra("user",u);
+                    startActivity(intent);
+                }
+                else{
+                    //bad response
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Log.i("StayLoggedIn", t.getMessage());
+            }
+        });
+
+
+    }
+
 }

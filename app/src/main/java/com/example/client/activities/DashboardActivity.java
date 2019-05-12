@@ -2,6 +2,8 @@ package com.example.client.activities;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -16,6 +18,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.client.R;
 import com.example.client.entitymodels.user.User;
@@ -24,33 +28,21 @@ import com.example.client.viewmodels.UserProfileViewModel;
 public class DashboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    public static final String UID_KEY = "userId";
-    private UserProfileViewModel userProfileViewModel;
+    private int uId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Bundle userBundle = getIntent().getExtras();
-        int userId = -1;
-        if(userBundle!=null){
-            userId = userBundle.getInt(UID_KEY);
-        }
-
-        userProfileViewModel = ViewModelProviders.of(this).get(UserProfileViewModel.class);
-        userProfileViewModel.init(userId);
-
-        userProfileViewModel.getUser().observe(this, new Observer<User>() {
-            @Override
-            public void onChanged(@Nullable User user) {
-                //Update ui
-                Log.i("GetUser", user.getUserName().toString());
-            }
-        });
-
         setContentView(R.layout.activity_dashboard);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        //get user
+        Intent intent=getIntent();
+        User user=intent.getParcelableExtra("user");
+
+        Toast.makeText(getApplicationContext(), user.toString(), Toast.LENGTH_LONG).show();
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -88,21 +80,6 @@ public class DashboardActivity extends AppCompatActivity
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -121,6 +98,10 @@ public class DashboardActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_send) {
 
+        } else if(id == R.id.nav_logout){
+            uId=0;
+            Intent intent=new Intent(DashboardActivity.this, LoginActivity.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

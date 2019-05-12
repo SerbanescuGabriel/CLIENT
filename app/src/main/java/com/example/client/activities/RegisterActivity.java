@@ -91,6 +91,10 @@ public class RegisterActivity extends AppCompatActivity {
                         User user = new User();
                         if(response.isSuccessful()){
                             user = response.body();
+                            Intent intent=new Intent(RegisterActivity.this, DashboardActivity.class);
+                            intent.putExtra("user",user);
+                            startActivity(intent);
+
                         }else{
                            if(response.code()==400){
                                JSONObject jsonObject=null;
@@ -110,10 +114,7 @@ public class RegisterActivity extends AppCompatActivity {
                            }
                         }
 
-                        if(user.getUserId() > 0){
-                            Intent intent=new Intent(RegisterActivity.this, DashboardActivity.class);
-                            startActivity(intent);
-                        }
+
 
                     }
 
