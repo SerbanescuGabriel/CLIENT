@@ -8,7 +8,9 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
-public class User implements Parcelable {
+import java.io.Serializable;
+
+public class User implements Serializable {
 
     @SerializedName("UserId")
     private long userId;
@@ -49,7 +51,7 @@ public class User implements Parcelable {
         email = in.readString();
     }
 
-    public static final Creator<User> CREATOR = new Creator<User>() {
+   /* public static final Creator<User> CREATOR = new Creator<User>() {
         @Override
         public User createFromParcel(Parcel in) {
             return new User(in);
@@ -60,7 +62,7 @@ public class User implements Parcelable {
             return new User[size];
         }
     };
-
+*/
     public long getUserId() {
         return userId;
     }
@@ -111,7 +113,7 @@ public class User implements Parcelable {
                 ", userDetails=" + userDetails +
                 '}';
     }
-
+/*
     @Override
     public int describeContents() {
         return 0;
@@ -124,4 +126,5 @@ public class User implements Parcelable {
         dest.writeString(password);
         dest.writeString(email);
     }
+    */
 }

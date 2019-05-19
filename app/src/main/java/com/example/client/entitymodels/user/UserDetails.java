@@ -1,8 +1,14 @@
 package com.example.client.entitymodels.user;
 
 import android.arch.persistence.room.PrimaryKey;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class UserDetails {
+import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
+
+public class UserDetails implements Serializable {
 
     @PrimaryKey
     private long UserDetailId;
@@ -21,6 +27,27 @@ public class UserDetails {
         ProfilePicture="";
     }
 
+    protected UserDetails(Parcel in) {
+        UserDetailId = in.readLong();
+        FirstName = in.readString();
+        LastName = in.readString();
+        Age = in.readInt();
+        Sex = in.readByte() != 0;
+        ProfilePicture = in.readString();
+    }
+/*
+    public static final Creator<UserDetails> CREATOR = new Creator<UserDetails>() {
+        @Override
+        public UserDetails createFromParcel(Parcel in) {
+            return new UserDetails(in);
+        }
+
+        @Override
+        public UserDetails[] newArray(int size) {
+            return new UserDetails[size];
+        }
+    };
+*/
     public long getUserDetailId() {
         return UserDetailId;
     }
@@ -68,4 +95,20 @@ public class UserDetails {
     public void setProfilePicture(String profilePicture) {
         ProfilePicture = profilePicture;
     }
+/*
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(UserDetailId);
+        dest.writeString(FirstName);
+        dest.writeString(LastName);
+        dest.writeInt(Age);
+        dest.writeByte((byte) (Sex ? 1 : 0));
+        dest.writeString(ProfilePicture);
+    }
+    */
 }

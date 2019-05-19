@@ -38,7 +38,7 @@ public class LoginActivity extends AppCompatActivity {
     private int id, idSP;
     private CheckBox cbKeepLoggedIn;
     SharedPreferences sp;
-    SharedPreferences.Editor editor;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,23 +49,13 @@ public class LoginActivity extends AppCompatActivity {
         btnRegister = findViewById(R.id.btnRegister);
         etUsername = findViewById(R.id.etUsername);
         etPassword = findViewById(R.id.etPassword);
-        cbKeepLoggedIn=findViewById(R.id.cbKeepLoggedIn);
+        cbKeepLoggedIn = findViewById(R.id.cbKeepLoggedIn);
         userWebservice = RetrofitSingleton.getInstance().create(IUserWebservice.class);
 
-
-        //save default value in SP
-        id = 0;
-        //idSP = 0;
         sp = getSharedPreferences("userId", MODE_PRIVATE);
-        editor = sp.edit();
-        editor.putInt("userId", id);
-        editor.commit();
+        idSP = sp.getInt("userId", MODE_PRIVATE);
 
-        //retrieve value from SP
-        sp = getSharedPreferences("userId", MODE_PRIVATE);
-        idSP=sp.getInt("userId", MODE_PRIVATE);
-
-        if (idSP != id) {
+        if (idSP > 0) {
             goDirectlyToDashboard(idSP);
         }
 
@@ -90,9 +80,13 @@ public class LoginActivity extends AppCompatActivity {
                         if (response.isSuccessful()) {
                             user = response.body();
                             Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
-                            intent.putExtra("user", user);
+                            Bundle bundle=new Bundle();
+                            //intent.putExtra("user", user);
+                            bundle.putSerializable("user", user);
+                            intent.putExtras(bundle);
                             startActivity(intent);
-                            if((cbKeepLoggedIn.isChecked())) {
+                            if ((cbKeepLoggedIn.isChecked())) {
+                                SharedPreferences.Editor editor = sp.edit();
                                 id = (int) user.getUserId();
                                 editor.putInt("userId", id);
                                 editor.commit();
@@ -126,7 +120,6 @@ public class LoginActivity extends AppCompatActivity {
         });
 
 
-
     }
 
     private void goDirectlyToDashboard(int id) {
@@ -135,14 +128,19 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
 
-                User u = new User();
+                User user = new User();
                 if (response.isSuccessful()) {
-                    u=response.body();
+                    user = response.body();
                     Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
-                    intent.putExtra("user",u);
+                   // intent.putExtra("user", u);
+
+                    Bundle bundle=new Bundle();
+                    //intent.putExtra("user", user);
+                    bundle.putSerializable("user", user);
+                    intent.putExtras(bundle);
+
                     startActivity(intent);
-                }
-                else{
+                } else {
                     //bad response
                 }
             }
