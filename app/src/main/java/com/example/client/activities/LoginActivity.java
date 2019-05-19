@@ -76,15 +76,14 @@ public class LoginActivity extends AppCompatActivity {
 
                         User user = new User();
 
-
                         if (response.isSuccessful()) {
                             user = response.body();
                             Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
                             Bundle bundle=new Bundle();
-                            //intent.putExtra("user", user);
                             bundle.putSerializable("user", user);
                             intent.putExtras(bundle);
                             startActivity(intent);
+
                             if ((cbKeepLoggedIn.isChecked())) {
                                 SharedPreferences.Editor editor = sp.edit();
                                 id = (int) user.getUserId();
@@ -92,7 +91,6 @@ public class LoginActivity extends AppCompatActivity {
                                 editor.commit();
                             }
                         } else {
-
                             if (response.code() == 400) {
                                 JSONObject jsonObject = null;
                                 try {
@@ -110,7 +108,6 @@ public class LoginActivity extends AppCompatActivity {
                             }
                         }
                     }
-
                     @Override
                     public void onFailure(Call<User> call, Throwable t) {
                         Log.i("LoginError", t.getMessage());
@@ -118,8 +115,6 @@ public class LoginActivity extends AppCompatActivity {
                 });
             }
         });
-
-
     }
 
     private void goDirectlyToDashboard(int id) {

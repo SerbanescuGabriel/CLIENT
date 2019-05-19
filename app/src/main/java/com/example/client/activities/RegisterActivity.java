@@ -58,7 +58,6 @@ public class RegisterActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(),"invalid email address", Toast.LENGTH_LONG);
                     }
                 }
-
             }
         });
 
@@ -73,7 +72,6 @@ public class RegisterActivity extends AppCompatActivity {
                        Toast.makeText(getApplicationContext(), "invalid password. Please be sure your password has One capital letter, one number" +
                               " and one symbol (@,$,%,&,#,)", Toast.LENGTH_LONG).show();
                    }
-
                 }
             }
         });
@@ -113,11 +111,7 @@ public class RegisterActivity extends AppCompatActivity {
                                }
                            }
                         }
-
-
-
                     }
-
                     @Override
                     public void onFailure(Call<User> call, Throwable t) {
                         Toast.makeText(getApplicationContext(),t.getMessage(),Toast.LENGTH_LONG).show();
@@ -125,16 +119,11 @@ public class RegisterActivity extends AppCompatActivity {
                 });
             }
         });
-
-
-
     }
 
     public boolean isValidPassword(String password){
-
         Pattern pattern;
         Matcher matcher;
-
         final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{4,}$";
 
         pattern=Pattern.compile(PASSWORD_PATTERN);
