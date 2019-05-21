@@ -1,9 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.widget.LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.BarcodeActivity">
 
-</android.support.constraint.ConstraintLayout>
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:orientation="vertical">
+
+      <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:id="@+id/txtProductName"/>
+      <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:id="@+id/txtManufacturerName"/>
+      <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:id="@+id/txtCategoryName"/>
+      <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:id="@+id/txtPrice"/>
+
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="horizontal">
+
+         <Button
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:id="@+id/btnCancel"
+             android:layout_weight="1"
+             android:text="Cancel"/>
+
+
+         <Button
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:id="@+id/btnAddToCart"
+             android:layout_weight="1"
+             android:text="Add to cart"/>
+
+      </LinearLayout>
+
+
+
+
+   </LinearLayout>
+
+
+</android.widget.LinearLayout>

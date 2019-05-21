@@ -152,7 +152,11 @@ public class DashboardActivity extends AppCompatActivity
             if(result.getContents()== null){
                 Toast.makeText(getApplicationContext(), "Result not found", Toast.LENGTH_SHORT).show();
             }else {
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+                Intent intent=new Intent(getApplicationContext(), BarcodeActivity.class);
+                intent.putExtra("barcode",result.getContents());
+                startActivity(intent);
+                finish();
+                /*AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
                 alertDialogBuilder.setMessage(result.getContents() + "\n\n Scan again?");
                 alertDialogBuilder.setTitle("Result Scanned!");
                 alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -171,6 +175,7 @@ public class DashboardActivity extends AppCompatActivity
 
                 AlertDialog alertDialog = alertDialogBuilder.create();
                 alertDialog.show();
+                */
             }
         }else {
             super.onActivityResult(requestCode, resultCode, data);
