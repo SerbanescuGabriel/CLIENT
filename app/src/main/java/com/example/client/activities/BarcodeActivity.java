@@ -57,6 +57,11 @@ public class BarcodeActivity extends AppCompatActivity {
                     public void onResponse(Call<Boolean> call, Response<Boolean> response) {
                         if(response.body()){
                             Toast.makeText(getApplicationContext(),"item added to cart",Toast.LENGTH_LONG).show();
+                           // finish();
+
+                            Intent intent=new Intent(getApplicationContext(),CartActivity.class);
+                            startActivity(intent);
+
                         }
                     }
 
