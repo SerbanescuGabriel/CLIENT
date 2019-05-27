@@ -3,9 +3,12 @@ package com.example.client.activities;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.client.R;
+import com.example.client.adapters.ProductListAdapter;
 import com.example.client.entitymodels.product.Product;
 import com.example.client.webservices.ICartWebservice;
 import com.example.client.webservices.RetrofitSingleton;
@@ -22,6 +25,10 @@ public class CartActivity extends AppCompatActivity {
     private TextView txtCart;
 
     private ICartWebservice cartWebservice;
+
+    private ListView listViewProducts;
+    private ListAdapter adapter;
+   // private List<Product> mProductList;
 
 
     SharedPreferences sp;
@@ -48,11 +55,12 @@ public class CartActivity extends AppCompatActivity {
 
                 if(response.isSuccessful()){
                     cart=response.body();
-                    String cartDisplay="";
-                    for(Product p: cart){
-                        cartDisplay+=p.toString();
-                    }
-                    txtCart.setText(cartDisplay);
+
+                    adapter=new ProductListAdapter(getApplicationContext(),cart);
+                    listViewProducts.setAdapter(adapter);
+
+                    //
+
                 }
 
             }
@@ -65,7 +73,9 @@ public class CartActivity extends AppCompatActivity {
     }
 
     private void setControl() {
-        txtCart=findViewById(R.id.txtCart);
+
+        listViewProducts=findViewById(R.id.listview_product);
+
     }
 
 

@@ -40,6 +40,7 @@ public class DashboardActivity extends AppCompatActivity
     Toolbar toolbar;
     TextView txtEmail, txtName;
     FloatingActionButton fab;
+    Button btnCart;
 
 
     @Override
@@ -54,6 +55,8 @@ public class DashboardActivity extends AppCompatActivity
         View headerView = navigationView.getHeaderView(0);
         txtEmail=headerView.findViewById(R.id.txtDEmail);
         txtName=headerView.findViewById(R.id.txtDName);
+
+
 
         //get user
         Intent intent = getIntent();
@@ -76,6 +79,8 @@ public class DashboardActivity extends AppCompatActivity
         toggle.syncState();
 
         navigationView.setNavigationItemSelectedListener(this);
+
+
     }
 
     void setUserDetails(User user) {
@@ -101,7 +106,26 @@ public class DashboardActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.dashboard, menu);
+        /*btnCart=findViewById(R.id.action_cart);
+        btnCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });*/
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id){
+            case R.id.action_cart:
+                Intent intent=new Intent(getApplicationContext(), CartActivity.class);
+                startActivity(intent);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -155,7 +179,7 @@ public class DashboardActivity extends AppCompatActivity
                 Intent intent=new Intent(getApplicationContext(), BarcodeActivity.class);
                 intent.putExtra("barcode",result.getContents());
                 startActivity(intent);
-                finish();
+               // finish();
                 /*AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
                 alertDialogBuilder.setMessage(result.getContents() + "\n\n Scan again?");
                 alertDialogBuilder.setTitle("Result Scanned!");
@@ -181,4 +205,6 @@ public class DashboardActivity extends AppCompatActivity
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
+
+
 }
