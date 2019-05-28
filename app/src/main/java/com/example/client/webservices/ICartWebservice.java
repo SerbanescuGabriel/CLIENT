@@ -22,4 +22,6 @@ public interface ICartWebservice {
     Call<List<Product>> getCartProducts(@Path("userId")int userId);
 
 
+    @GET("cart/cartId/{userId}")
+    Call<Long> getCartId(@Path("userId") int userId);
 }
