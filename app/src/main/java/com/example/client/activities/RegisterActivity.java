@@ -6,10 +6,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.example.client.R;
 import com.example.client.entitymodels.user.User;
+import com.example.client.entitymodels.user.UserDetails;
 import com.example.client.webservices.IUserWebservice;
 import com.example.client.webservices.Messages;
 import com.example.client.webservices.RetrofitSingleton;
@@ -29,8 +32,11 @@ import retrofit2.Response;
 
 public class RegisterActivity extends AppCompatActivity {
     private Button btnRegister;
-    private EditText etUsername, etPassword, etEmail;
+    private EditText etUsername, etPassword, etEmail,etFirstName,etLastName,etAge;
+    private RadioGroup rgSex;
+    private RadioButton rbMale, rbFemale;
     IUserWebservice userWebservice;
+    private  Boolean userGender;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +47,12 @@ public class RegisterActivity extends AppCompatActivity {
         etUsername = findViewById(R.id.etRegUsername);
         etPassword = findViewById(R.id.etRegPassword);
         etEmail = findViewById(R.id.etRegEmail);
+        etFirstName=findViewById(R.id.etFirstName);
+        etLastName=findViewById(R.id.etLastName);
+        etAge=findViewById(R.id.etAge);
+        rgSex=findViewById(R.id.rgSex);
+        rbMale=findViewById(R.id.rbMale);
+        rbFemale=findViewById(R.id.rbFemale);
 
         userWebservice = RetrofitSingleton.getInstance().create(IUserWebservice.class);
 
@@ -76,13 +88,30 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
+
+
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+               if(rgSex.getCheckedRadioButtonId()==-1){
+
+               }
+               else {
+
+
+                   if (rbMale.isChecked()) {
+                       userGender = true;
+                   }
+                   else userGender=false;
+               }
                 userWebservice.register(
                         etUsername.getText().toString(),
                         etPassword.getText().toString(),
-                        etEmail.getText().toString()
+                        etEmail.getText().toString(),
+                        etFirstName.getText().toString(),
+                        etLastName.getText().toString(),
+                        Integer.parseInt(etAge.getText().toString()),
+                        userGender
                 ).enqueue(new Callback<User>() {
                     @Override
                     public void onResponse(Call<User> call, Response<User> response) {
