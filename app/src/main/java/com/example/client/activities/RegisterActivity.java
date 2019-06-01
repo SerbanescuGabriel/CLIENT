@@ -1,6 +1,7 @@
 package com.example.client.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -18,8 +19,6 @@ import com.example.client.entitymodels.user.UserDetails;
 import com.example.client.webservices.IUserWebservice;
 import com.example.client.webservices.Messages;
 import com.example.client.webservices.RetrofitSingleton;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,13 +38,14 @@ public class RegisterActivity extends AppCompatActivity {
     private RadioButton rbMale, rbFemale;
     IUserWebservice userWebservice;
     private  Boolean userGender;
+    SharedPreferences sp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         populateControls();
-
+        sp = getSharedPreferences("userId", MODE_PRIVATE);
         userWebservice = RetrofitSingleton.getInstance().create(IUserWebservice.class);
 
         //todo-> validation on etUsername
@@ -116,8 +116,6 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
-
-
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -145,6 +143,7 @@ public class RegisterActivity extends AppCompatActivity {
                         User user = new User();
                         if(response.isSuccessful()){
                             user = response.body();
+                            saveUserId((int)user.getUserId());
                             Intent intent=new Intent(RegisterActivity.this, DashboardActivity.class);
                             intent.putExtra("user",user);
                             startActivity(intent);
@@ -241,5 +240,11 @@ public class RegisterActivity extends AppCompatActivity {
         matcher=pattern.matcher(password);
         return matcher.matches();
 
+    }
+
+    public void saveUserId(int userId){
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putInt("userId", userId);
+        editor.commit();
     }
 }

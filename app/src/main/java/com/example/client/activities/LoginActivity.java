@@ -146,9 +146,5 @@ public class LoginActivity extends AppCompatActivity {
                 Log.i("StayLoggedIn", t.getMessage());
             }
         });
-
-
     }
-
-
 }
