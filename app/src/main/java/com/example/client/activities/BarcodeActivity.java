@@ -22,8 +22,8 @@ import retrofit2.Response;
 public class BarcodeActivity extends AppCompatActivity {
 
 
-    private TextView txtProductName, txtProductManufacturer,txtProductCategory,txtPrice;
-    private Button btnCancel, btnAddToCart;
+    private TextView txtProductName, txtProductManufacturer,txtProductCategory,txtPrice, txtQtty;
+    private Button btnCancel, btnAddToCart, btnPlusQtty, btnMinusQtty;
 
     private IProductWebservice productWebservice;
     private ICartWebservice cartWebservice;
@@ -44,33 +44,7 @@ public class BarcodeActivity extends AppCompatActivity {
 
         bindControls();
         populateControls(barcode);
-
-        btnAddToCart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int userId;
-                long idProduct=product.getProductId();
-                sp=getSharedPreferences("userId", MODE_PRIVATE);
-                userId=sp.getInt("userId",MODE_PRIVATE);
-                cartWebservice.addItemToCart(userId,idProduct).enqueue(new Callback<Boolean>() {
-                    @Override
-                    public void onResponse(Call<Boolean> call, Response<Boolean> response) {
-                        if(response.body()){
-                            Toast.makeText(getApplicationContext(),"item added to cart",Toast.LENGTH_LONG).show();
-                            finish();
-
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<Boolean> call, Throwable t) {
-                        Toast.makeText(getApplicationContext(),"item NOT added to cart",Toast.LENGTH_LONG).show();
-                    }
-                });
-            }
-        });
-
-
+        setClicks();
     }
 
      void populateControls(String barcode){
@@ -104,7 +78,55 @@ public class BarcodeActivity extends AppCompatActivity {
         txtPrice=findViewById(R.id.txtPrice);
         btnAddToCart=findViewById(R.id.btnAddToCart);
         btnCancel=findViewById(R.id.btnCancel);
+        btnPlusQtty = findViewById(R.id.btnPlusQttyBarCode);
+        btnMinusQtty = findViewById(R.id.btnMinusQttyBarCode);
+        txtQtty = findViewById(R.id.txtQuantityBarCode);
+     }
 
+     void setClicks(){
+         btnAddToCart.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+                 int userId;
+                 long idProduct=product.getProductId();
+                 sp=getSharedPreferences("userId", MODE_PRIVATE);
+                 userId=sp.getInt("userId",MODE_PRIVATE);
+                 int quantity = Integer.parseInt(txtQtty.getText().toString());
+                 cartWebservice.addItemToCart(userId, idProduct, quantity).enqueue(new Callback<Boolean>() {
+                     @Override
+                     public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                         if(response.body()){
+                             Toast.makeText(getApplicationContext(),"item added to cart",Toast.LENGTH_LONG).show();
+                             finish();
+
+                         }
+                     }
+
+                     @Override
+                     public void onFailure(Call<Boolean> call, Throwable t) {
+                         Toast.makeText(getApplicationContext(),"item NOT added to cart",Toast.LENGTH_LONG).show();
+                     }
+                 });
+             }
+         });
+
+         btnPlusQtty.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+                 int value = Integer.parseInt(txtQtty.getText().toString());
+                 value++;
+                 txtQtty.setText(Integer.toString(value));
+             }
+         });
+
+         btnMinusQtty.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+                 int value = Integer.parseInt(txtQtty.getText().toString());
+                 value--;
+                 txtQtty.setText(Integer.toString(value));
+             }
+         });
      }
 
 }

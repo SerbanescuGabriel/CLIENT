@@ -21,6 +21,17 @@ public class Product implements Serializable {
     @SerializedName("Price")
     public float price;
 
+    public int getQuantity() {
+        return Quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        Quantity = quantity;
+    }
+
+    @SerializedName("Quantity")
+    public int Quantity;
+
 
     public Product() {
 

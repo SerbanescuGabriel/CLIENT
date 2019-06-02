@@ -15,7 +15,7 @@ public interface ICartWebservice {
 
     @POST("cart")
     @FormUrlEncoded
-    Call<Boolean> addItemToCart(@Field("userId") int userId,@Field("productId") long productId);
+    Call<Boolean> addItemToCart(@Field("userId") int userId,@Field("productId") long productId, @Field("Quantity") int quantity);
 
 
     @GET("cart/{userId}")

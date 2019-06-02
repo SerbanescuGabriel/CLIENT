@@ -10,7 +10,8 @@ public class RetrofitSingleton {
     private static Retrofit instance;
     //private static final String BASE_URL="http://10.0.2.2:49807/api/";
     //private static String BASE_URL="http://10.0.2.2:49801/api/"; //iulia
-    private static String BASE_URL="http://192.168.100.19:48010/api/"; // Server deployat
+    //private static String BASE_URL="http://192.168.100.19:48010/api/"; // IP Gabi
+    private static String BASE_URL="http://192.168.0.15:48010/api/"; // IP Iulia
 
     public static synchronized Retrofit getInstance(){
         if(instance == null){
