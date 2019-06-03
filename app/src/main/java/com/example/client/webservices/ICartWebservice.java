@@ -24,4 +24,12 @@ public interface ICartWebservice {
 
     @GET("cart/cartId/{userId}")
     Call<Long> getCartId(@Path("userId") int userId);
+
+    @POST("cart/add")
+    @FormUrlEncoded
+    Call<Boolean> Plus(@Field("UserId") int userId, @Field("ProductId") int productId);
+
+    @POST("cart/substract")
+    @FormUrlEncoded
+    Call<Boolean> Minus(@Field("UserId") int userId, @Field("ProductId") int productId);
 }
