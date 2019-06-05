@@ -13,6 +13,7 @@ public class RetrofitSingleton {
     private static String BASE_URL="http://192.168.100.19:48010/api/"; // IP Gabi
     //private static String BASE_URL="http://192.168.0.15:48010/api/"; // IP Iulia
     //private static String BASE_URL="http://192.168.43.23:48010/api/"; // IP Telefon Iulia
+    //private static String BASE_URL="http://192.168.43.23:48010/api/"; // IP Telefon Gabi
 
     public static synchronized Retrofit getInstance(){
         if(instance == null){

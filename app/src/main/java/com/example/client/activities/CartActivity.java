@@ -105,7 +105,7 @@ public class CartActivity extends AppCompatActivity {
 
                 if(response.isSuccessful()){
                     cart=response.body();
-                    adapter=new ProductListAdapter(getApplicationContext(),cart);
+                    adapter=new ProductListAdapter(CartActivity.this,cart);
                     listViewProducts.setAdapter(adapter);
                     //todo
                 }

@@ -1,5 +1,6 @@
 package com.example.client.adapters;
 
+import android.app.ProgressDialog;
 import android.arch.lifecycle.ViewModel;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.client.R;
+import com.example.client.activities.CartActivity;
 import com.example.client.entitymodels.product.Product;
 import com.example.client.webservices.ICartWebservice;
 import com.example.client.webservices.RetrofitSingleton;
@@ -31,6 +33,7 @@ public class ProductListAdapter extends BaseAdapter {
     private List<Product> mProductList;
     ICartWebservice cartWebservice;
     SharedPreferences sharedPreferences;
+    ProgressDialog progressDialog;
     int userId;
 
     public ProductListAdapter(Context mContext, List<Product> mProductList) {
@@ -39,6 +42,8 @@ public class ProductListAdapter extends BaseAdapter {
         cartWebservice = RetrofitSingleton.getInstance().create(ICartWebservice.class);
         sharedPreferences =  mContext.getSharedPreferences("userId", MODE_PRIVATE);
         userId = sharedPreferences.getInt("userId", MODE_PRIVATE);
+        progressDialog = new ProgressDialog(mContext);
+        progressDialog.setMessage("Loading...");
     }
 
     @Override
@@ -74,6 +79,7 @@ public class ProductListAdapter extends BaseAdapter {
             public void onClick(View v) {
                 int productId = (int)mProductList.get(position).getProductId();
                 addItem(productId);
+                progressDialog.show();
             }
         });
 
@@ -82,6 +88,7 @@ public class ProductListAdapter extends BaseAdapter {
             public void onClick(View v) {
                 int productId = (int)mProductList.get(position).getProductId();
                 subtractItem(productId);
+                progressDialog.show();
             }
         });
 
@@ -102,7 +109,7 @@ public class ProductListAdapter extends BaseAdapter {
         cartWebservice.Plus(userId, productId).enqueue(new Callback<Boolean>() {
             @Override
             public void onResponse(Call<Boolean> call, Response<Boolean> response) {
-                notifyDataSetChanged();
+                getItems();
             }
 
             @Override
@@ -115,19 +122,13 @@ public class ProductListAdapter extends BaseAdapter {
         cartWebservice.Minus(userId, productId).enqueue(new Callback<Boolean>() {
             @Override
             public void onResponse(Call<Boolean> call, Response<Boolean> response) {
-                notifyDataSetChanged();
+                getItems();
             }
 
             @Override
             public void onFailure(Call<Boolean> call, Throwable t) {
             }
         });
-    }
-
-    @Override
-    public void notifyDataSetChanged() {
-        super.notifyDataSetChanged();
-        getItems();
     }
 
     private void getItems(){
@@ -138,7 +139,8 @@ public class ProductListAdapter extends BaseAdapter {
 
                 if(response.isSuccessful()){
                     mProductList = response.body();
-                    //todo
+                    notifyDataSetChanged();
+                    progressDialog.cancel();
                 }
             }
 
