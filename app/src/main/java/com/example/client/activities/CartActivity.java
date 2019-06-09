@@ -3,11 +3,13 @@ package com.example.client.activities;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.SharedPreferences;
+import android.database.DataSetObserver;
 import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -42,6 +44,7 @@ public class CartActivity extends AppCompatActivity {
     SharedPreferences sp;
     private Dialog dialogQrCode;
     private ImageView imgViewQRCode;
+    private TextView etTotalPrice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,8 +108,14 @@ public class CartActivity extends AppCompatActivity {
 
                 if(response.isSuccessful()){
                     cart=response.body();
+                    float totalPrice = 0;
+
+                    for(Product product : cart ){
+                        totalPrice+=product.getQuantity() * product.getPrice();
+                    }
                     adapter=new ProductListAdapter(CartActivity.this,cart);
                     listViewProducts.setAdapter(adapter);
+                    etTotalPrice.setText("Your total price is: " + totalPrice + " RON");
                     //todo
                 }
 
@@ -120,7 +129,7 @@ public class CartActivity extends AppCompatActivity {
     }
 
     private void setControl() {
-
+        etTotalPrice = findViewById(R.id.etTotalPriceCart);
         listViewProducts=findViewById(R.id.listview_product);
         btnGenerateQRCode=findViewById(R.id.btnGenerateQRCode);
     }

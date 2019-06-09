@@ -1,5 +1,6 @@
 package com.example.client.adapters;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.arch.lifecycle.ViewModel;
 import android.content.Context;
@@ -35,6 +36,8 @@ public class ProductListAdapter extends BaseAdapter {
     SharedPreferences sharedPreferences;
     ProgressDialog progressDialog;
     int userId;
+    View cartView;
+    TextView etPrice;
 
     public ProductListAdapter(Context mContext, List<Product> mProductList) {
         this.mContext = mContext;
@@ -44,6 +47,8 @@ public class ProductListAdapter extends BaseAdapter {
         userId = sharedPreferences.getInt("userId", MODE_PRIVATE);
         progressDialog = new ProgressDialog(mContext);
         progressDialog.setMessage("Loading...");
+        cartView = ((Activity)mContext).getWindow().getDecorView().findViewById(android.R.id.content);
+        etPrice = cartView.findViewById(R.id.etTotalPriceCart);
     }
 
     @Override
@@ -93,10 +98,10 @@ public class ProductListAdapter extends BaseAdapter {
         });
 
         //setText for textView
-        txtProductName.setText(mProductList.get(position).getProductName());
-        txtManufacturerName.setText(mProductList.get(position).getManufacturerName());
-        txtCategoryName.setText(mProductList.get(position).getCategoryName());
-        txtPrice.setText(String.valueOf(mProductList.get(position).getPrice() * mProductList.get(position).getQuantity()) +" RON");
+        txtProductName.setText("Product Name: "+mProductList.get(position).getProductName());
+        txtManufacturerName.setText("Maunufacturer: " + mProductList.get(position).getManufacturerName());
+        txtCategoryName.setText("Product Category: " + mProductList.get(position).getCategoryName());
+        txtPrice.setText("Price: "+ String.valueOf(mProductList.get(position).getPrice() * mProductList.get(position).getQuantity()) +" RON");
         txtQuantity.setText(String.valueOf(mProductList.get(position).getQuantity()));
 
         //save product id to tag
@@ -139,6 +144,11 @@ public class ProductListAdapter extends BaseAdapter {
 
                 if(response.isSuccessful()){
                     mProductList = response.body();
+                    float total = 0;
+                    for(Product product: mProductList){
+                        total+= product.getQuantity() * product.getPrice();
+                    }
+                    etPrice.setText("Your total price is: " + total + " RON");
                     notifyDataSetChanged();
                     progressDialog.cancel();
                 }
