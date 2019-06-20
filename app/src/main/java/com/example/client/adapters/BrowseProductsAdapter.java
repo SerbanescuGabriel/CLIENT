@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.example.client.R;
 import com.example.client.entitymodels.product.Product;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BrowseProductsAdapter extends BaseAdapter {
@@ -53,5 +54,11 @@ public class BrowseProductsAdapter extends BaseAdapter {
         v.setTag(mList.get(position).getProductId());
 
         return v;
+    }
+
+    public void UpdateList(List<Product> filteredList){
+        mList = new ArrayList<Product>();
+        mList = filteredList;
+        notifyDataSetChanged();
     }
 }

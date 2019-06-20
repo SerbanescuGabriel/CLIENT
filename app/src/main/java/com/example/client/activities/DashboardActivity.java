@@ -22,16 +22,28 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.client.R;
+import com.example.client.adapters.BrowseProductsAdapter;
+import com.example.client.entitymodels.product.Product;
 import com.example.client.entitymodels.user.User;
 import com.example.client.entitymodels.user.UserDetails;
 import com.example.client.fragments.Portrait;
 import com.example.client.viewmodels.UserProfileViewModel;
+import com.example.client.webservices.IWishListWebService;
+import com.example.client.webservices.RetrofitSingleton;
+import com.google.android.gms.common.FirstPartyScopes;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class DashboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -42,6 +54,10 @@ public class DashboardActivity extends AppCompatActivity
     TextView txtEmail, txtName;
     FloatingActionButton fab;
     Button btnCart;
+    ListView wishList;
+    BrowseProductsAdapter adapter;
+    List<Product> products;
+    IWishListWebService wishListWebService;
 
 
     @Override
@@ -52,6 +68,9 @@ public class DashboardActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         fab = findViewById(R.id.idFloatingButton);
         NavigationView navigationView = findViewById(R.id.nav_view);
+        wishListWebService = RetrofitSingleton.getInstance().create(IWishListWebService.class);
+        wishList = findViewById(R.id.lvWishList);
+
 
         View headerView = navigationView.getHeaderView(0);
         txtEmail=headerView.findViewById(R.id.txtDEmail);
@@ -64,6 +83,7 @@ public class DashboardActivity extends AppCompatActivity
         Bundle bundle = intent.getExtras();
         User user = (User) bundle.getSerializable("user");
         setUserDetails(user);
+        getWishListItems((int)user.getUserId());
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -211,5 +231,19 @@ public class DashboardActivity extends AppCompatActivity
         }
     }
 
+    public void getWishListItems(int userId){
+        wishListWebService.getWishlistItems(userId).enqueue(new Callback<List<Product>>() {
+            @Override
+            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                products = response.body();
+                adapter = new BrowseProductsAdapter(DashboardActivity.this,products);
+                wishList.setAdapter(adapter);
+            }
 
+            @Override
+            public void onFailure(Call<List<Product>> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
 }
