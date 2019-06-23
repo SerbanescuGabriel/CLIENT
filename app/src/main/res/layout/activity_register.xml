@@ -1,20 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.widget.LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.RegisterActivity"
     android:orientation="vertical"
-    android:background="@color/background">
+    android:background="@color/mybackground">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:background="@drawable/bgcard"
+        android:padding="40dp"
         android:orientation="vertical"
-        android:id="@+id/layout1">
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:textColor="#000"
+            android:layout_gravity="center"
+            android:fontFamily="@font/quicksand_light"
+            android:text="Create your account here"
+            android:textSize="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
         <EditText
+            android:background="@drawable/edtstyle"
             android:id="@+id/etRegEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -22,8 +34,8 @@
             android:hint="Email"
             android:layout_gravity="center"/>
 
-
         <EditText
+            android:background="@drawable/edtstyle"
             android:id="@+id/etRegUsername"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -32,6 +44,7 @@
             android:layout_gravity="center"/>
 
         <EditText
+            android:background="@drawable/edtstyle"
             android:id="@+id/etRegPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -41,6 +54,7 @@
             android:layout_gravity="center"/>
 
         <EditText
+            android:background="@drawable/edtstyle"
             android:id="@+id/etFirstName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -49,6 +63,7 @@
             android:layout_gravity="center"/>
 
         <EditText
+            android:background="@drawable/edtstyle"
             android:id="@+id/etLastName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -57,6 +72,7 @@
             android:layout_gravity="center"/>
 
         <EditText
+            android:background="@drawable/edtstyle"
             android:id="@+id/etAge"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -66,6 +82,7 @@
             android:layout_gravity="center"/>
 
         <TextView
+            android:fontFamily="@font/quicksand_bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -90,24 +107,16 @@
                 android:text="Female"/>
         </RadioGroup>
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_above="@id/layout1">
-
         <Button
+            android:layout_marginTop="10dp"
+            android:background="@drawable/custom_button2"
             android:id="@+id/btnRegister"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Register"
-            android:enabled="false"
-            android:layout_gravity="center"/>
-
+            android:layout_gravity="center"
+            android:text="Register" />
 
     </LinearLayout>
 
 
-</android.widget.LinearLayout>
+</RelativeLayout>

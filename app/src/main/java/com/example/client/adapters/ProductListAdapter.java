@@ -71,8 +71,8 @@ public class ProductListAdapter extends BaseAdapter {
 
         View v= View.inflate(mContext, R.layout.item_product_list,null);
         TextView txtProductName=v.findViewById(R.id.txtProductNameC);
-        TextView txtManufacturerName=v.findViewById(R.id.txtManufacturerNameC);
-        TextView txtCategoryName=v.findViewById(R.id.txtCategoryNameC);
+        //TextView txtManufacturerName=v.findViewById(R.id.txtManufacturerNameC);
+        //TextView txtCategoryName=v.findViewById(R.id.txtCategoryNameC);
         TextView txtPrice=v.findViewById(R.id.txtPriceC);
         final TextView txtQuantity = v.findViewById(R.id.txtQuantity);
         Button btnPlus, btnMinus;
@@ -98,9 +98,9 @@ public class ProductListAdapter extends BaseAdapter {
         });
 
         //setText for textView
-        txtProductName.setText("Product Name: "+mProductList.get(position).getProductName());
-        txtManufacturerName.setText("Maunufacturer: " + mProductList.get(position).getManufacturerName());
-        txtCategoryName.setText("Product Category: " + mProductList.get(position).getCategoryName());
+        txtProductName.setText(mProductList.get(position).getProductName());
+        //txtManufacturerName.setText("Maunufacturer: " + mProductList.get(position).getManufacturerName());
+        //txtCategoryName.setText("Product Category: " + mProductList.get(position).getCategoryName());
         txtPrice.setText("Price: "+ String.valueOf(mProductList.get(position).getPrice() * mProductList.get(position).getQuantity()) +" RON");
         txtQuantity.setText(String.valueOf(mProductList.get(position).getQuantity()));
 

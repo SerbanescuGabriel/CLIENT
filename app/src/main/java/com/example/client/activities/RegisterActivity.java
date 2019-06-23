@@ -42,6 +42,8 @@ public class RegisterActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getSupportActionBar().hide();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         populateControls();
@@ -227,8 +229,6 @@ public class RegisterActivity extends AppCompatActivity {
         rgSex=findViewById(R.id.rgSex);
         rbMale=findViewById(R.id.rbMale);
         rbFemale=findViewById(R.id.rbFemale);
-
-
     }
 
     public boolean isValidPassword(String password){
