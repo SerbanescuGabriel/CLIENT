@@ -1,86 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.widget.LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.BarcodeActivity"
-    android:background="@drawable/background">
+    android:background="@color/mybackground">
 
    <LinearLayout
+       android:paddingTop="20dp"
+       android:gravity="center"
+       android:layout_marginTop="100dp"
+       android:background="@drawable/bgcard2"
+       android:layout_centerInParent="true"
+       android:orientation="vertical"
        android:layout_width="match_parent"
-       android:layout_height="match_parent"
-       android:orientation="vertical">
+       android:layout_height="wrap_content">
 
-      <TextView
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:id="@+id/txtProductName"/>
-      <TextView
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:id="@+id/txtManufacturerName"/>
-      <TextView
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:id="@+id/txtCategoryName"/>
-      <TextView
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:id="@+id/txtPrice"/>
+       <TextView
+           android:textAlignment="center"
+           android:text="Product Name"
+           android:textColor="@color/dark"
+           android:textSize="24dp"
+           android:fontFamily="@font/quicksand_bold"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:id="@+id/txtProductName"/>
 
-      <LinearLayout
-          android:orientation="horizontal"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content">
+       <TextView
+           android:layout_marginTop="10dp"
+           android:textAlignment="center"
+           android:text="Price"
+           android:textColor="@color/dark"
+           android:textSize="24dp"
+           android:fontFamily="@font/quicksand_bold"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:id="@+id/txtPrice"/>
 
-         <Button
-             android:id="@+id/btnPlusQttyBarCode"
-             android:text="+"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent" />
+       <RelativeLayout
+           android:layout_marginTop="15dp"
+           android:weightSum="3"
+           android:layout_gravity="center"
+           android:orientation="horizontal"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content">
 
-         <TextView
-             android:id="@+id/txtQuantityBarCode"
-             android:text="1"
-             android:textAlignment="center"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content" />
+           <Button
+               android:layout_marginRight="80dp"
+               android:layout_alignParentRight="true"
+               android:textColor="@color/dark"
+               android:background="@drawable/custom_button3"
+               android:layout_weight="1"
+               android:textSize="40dp"
+               android:layout_gravity="center_horizontal"
+               android:id="@+id/btnPlusQttyBarCode"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="+" />
 
-         <Button
-             android:id="@+id/btnMinusQttyBarCode"
-             android:text="-"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content" />
+           <TextView
+               android:textColor="@color/dark"
+               android:layout_centerInParent="true"
+               android:textSize="25dp"
+               android:layout_gravity="center_horizontal"
+               android:id="@+id/txtQuantityBarCode"
+               android:textAlignment="center"
+               android:text="1"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content" />
 
-      </LinearLayout>
+           <Button
+               android:layout_marginLeft="80dp"
+               android:layout_alignParentLeft="true"
+               android:textColor="@color/dark"
+               android:background="@drawable/custom_button3"
+               android:layout_weight="1"
+               android:textSize="40dp"
+               android:layout_gravity="center_horizontal"
+               android:id="@+id/btnMinusQttyBarCode"
+               android:text="-"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content" />
 
-      <LinearLayout
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:orientation="horizontal">
+       </RelativeLayout>
 
-         <Button
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             android:id="@+id/btnCancel"
-             android:layout_weight="1"
-             android:text="Cancel"/>
+       <LinearLayout
+           android:layout_marginBottom="20dp"
+           android:orientation="horizontal"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent">
 
-
-         <Button
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             android:id="@+id/btnAddToCart"
-             android:layout_weight="1"
-             android:text="Add to cart"/>
-
-      </LinearLayout>
+           <Button
+               android:layout_marginLeft="15dp"
+               android:layout_marginRight="5dp"
+               android:textColor="#FFF"
+               android:background="@drawable/custom_button4"
+               android:layout_width="280dp"
+               android:layout_height="match_parent"
+               android:id="@+id/btnCancel"
+               android:layout_weight="1"
+               android:text="Cancel"/>
 
 
+           <Button
+               android:layout_marginRight="15dp"
+               android:layout_marginLeft="5dp"
+               android:layout_width="280dp"
+               android:background="@drawable/custom_button2"
+               android:layout_height="match_parent"
+               android:id="@+id/btnAddToCart"
+               android:layout_weight="1"
+               android:text="Add to cart"/>
 
+       </LinearLayout>
 
    </LinearLayout>
 
 
-</android.widget.LinearLayout>
+</RelativeLayout>

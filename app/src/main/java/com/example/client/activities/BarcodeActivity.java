@@ -57,8 +57,8 @@ public class BarcodeActivity extends AppCompatActivity {
                     //am facut product global ca sa pot sa il accesez si in add2cart
                      product=response.body();
                     txtProductName.setText(product.getProductName());
-                    txtProductManufacturer.setText(product.getManufacturerName());
-                    txtProductCategory.setText(product.getCategoryName());
+                    //txtProductManufacturer.setText(product.getManufacturerName());
+                    //txtProductCategory.setText(product.getCategoryName());
                     txtPrice.setText(Float.toString(product.getPrice()));
                 }
             }
@@ -73,8 +73,8 @@ public class BarcodeActivity extends AppCompatActivity {
 
      void bindControls(){
         txtProductName=findViewById(R.id.txtProductName);
-        txtProductManufacturer=findViewById(R.id.txtManufacturerName);
-        txtProductCategory=findViewById(R.id.txtCategoryName);
+        //txtProductManufacturer=findViewById(R.id.txtManufacturerName);
+        //txtProductCategory=findViewById(R.id.txtCategoryName);
         txtPrice=findViewById(R.id.txtPrice);
         btnAddToCart=findViewById(R.id.btnAddToCart);
         btnCancel=findViewById(R.id.btnCancel);

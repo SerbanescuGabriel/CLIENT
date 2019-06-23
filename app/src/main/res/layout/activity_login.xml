@@ -10,7 +10,7 @@
 
     <ImageView
         android:scaleType="fitCenter"
-        android:src="@drawable/logo180px"
+        android:src="@drawable/logo150px"
         android:layout_alignParentTop="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
@@ -70,6 +70,7 @@
             android:text="Login" />
 
         <TextView
+            android:layout_marginBottom="12dp"
             android:layout_marginTop="42dp"
             android:layout_gravity="center"
             android:fontFamily="@font/quicksand_bold"
