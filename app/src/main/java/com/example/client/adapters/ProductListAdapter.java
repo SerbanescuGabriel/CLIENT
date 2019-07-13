@@ -126,14 +126,14 @@ public class ProductListAdapter extends BaseAdapter {
         });
     }
 
-    private void subtractItem(int productId){
+    private void subtractItem(final int productId){
         cartWebservice.Minus(userId, productId).enqueue(new Callback<Boolean>() {
             @Override
             public void onResponse(Call<Boolean> call, Response<Boolean> response) {
                 if(response.body()){
                     getItems();
                 }else{
-                    AlertDialogDelete();
+                    AlertDialogDelete(productId);
                 }
             }
 
@@ -164,7 +164,7 @@ public class ProductListAdapter extends BaseAdapter {
         });
     }
 
-    public void AlertDialogDelete(){
+    public void AlertDialogDelete(final int productId){
         android.app.AlertDialog.Builder dialogBuilder = new android.app.AlertDialog.Builder(mContext);
         dialogBuilder.setMessage("Do you want to delete this item?");
         dialogBuilder.setCancelable(false);
@@ -172,6 +172,7 @@ public class ProductListAdapter extends BaseAdapter {
         dialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                DeleteCartItem(userId, productId);
                 dialog.dismiss();
                 progressDialog.cancel();
             }

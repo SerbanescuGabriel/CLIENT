@@ -83,4 +83,26 @@ public class BrowseProductsAdapter extends BaseAdapter {
             }
         });
     }
+
+    public void RemoveItemFromWishList(int userId, final int productId){
+        wishListWebService.removeItemFromWishlist(userId, productId).enqueue(new Callback<Boolean>() {
+            @Override
+            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                Product product = new Product();
+
+                for(Product p:mList){
+                    if(p.getProductId() == productId){
+                        product = p;
+                    }
+                }
+                mList.remove(product);
+                notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Call<Boolean> call, Throwable t) {
+
+            }
+        });
+    }
 }

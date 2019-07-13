@@ -127,4 +127,5 @@ public class BrowseProducsActivity extends AppCompatActivity implements SearchVi
             }
         });
     }
+
 }

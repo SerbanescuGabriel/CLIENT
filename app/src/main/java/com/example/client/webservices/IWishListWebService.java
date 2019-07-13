@@ -19,4 +19,8 @@ public interface IWishListWebService {
     @GET("wishlist/{userId}")
     Call<List<Product>> getWishlistItems(@Path("userId") int userId);
 
+    @POST("wishlist/remove")
+    @FormUrlEncoded
+    Call<Boolean> removeItemFromWishlist(@Field("userId") int userId, @Field("productId") long productId);
+
 }

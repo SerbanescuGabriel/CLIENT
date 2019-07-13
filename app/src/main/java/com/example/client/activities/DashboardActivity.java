@@ -1,5 +1,6 @@
 package com.example.client.activities;
 
+import android.app.AlertDialog;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
@@ -11,7 +12,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.TextPaint;
@@ -25,6 +25,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -103,6 +104,7 @@ public class DashboardActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+        setOnClickWish();
     }
 
     void setUserDetails(User user) {
@@ -113,6 +115,40 @@ public class DashboardActivity extends AppCompatActivity
         String email = user.getEmail();
         txtName.setText(name);
         txtEmail.setText(email);
+    }
+
+    void setOnClickWish(){
+        wishList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                AlertDialogDelete((int)products.get(position).getProductId());
+                return false;
+            }
+        });
+    }
+
+    public void AlertDialogDelete(final int productId){
+        android.app.AlertDialog.Builder dialogBuilder = new android.app.AlertDialog.Builder(DashboardActivity.this);
+        dialogBuilder.setMessage("Do you want to delete this item?");
+        dialogBuilder.setCancelable(false);
+
+        dialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                adapter.RemoveItemFromWishList(getUserId(), productId);
+                dialog.dismiss();
+            }
+        });
+
+        dialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.show();
     }
 
     @Override
@@ -207,5 +243,10 @@ public class DashboardActivity extends AppCompatActivity
 
         sp = getSharedPreferences("userId", MODE_PRIVATE);
         getWishListItems(sp.getInt("userId", MODE_PRIVATE));
+    }
+
+    private int getUserId(){
+        sp = getSharedPreferences("userId", MODE_PRIVATE);
+        return sp.getInt("userId", MODE_PRIVATE);
     }
 }
