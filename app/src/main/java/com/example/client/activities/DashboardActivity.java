@@ -57,7 +57,6 @@ public class DashboardActivity extends AppCompatActivity
     Toolbar toolbar;
     TextView txtEmail, txtName;
     FloatingActionButton fab;
-    Button btnCart;
     ListView wishList;
     BrowseProductsAdapter adapter;
     List<Product> products;

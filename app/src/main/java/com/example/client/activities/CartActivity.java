@@ -2,12 +2,14 @@ package com.example.client.activities;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.database.DataSetObserver;
 import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -38,10 +40,11 @@ public class CartActivity extends AppCompatActivity {
 
     private ICartWebservice cartWebservice;
     private ListView listViewProducts;
-    private ListAdapter adapter;
+    private ProductListAdapter adapter;
     private Button btnGenerateQRCode;
     SharedPreferences sp;
     private TextView etTotalPrice;
+    List<Product> cartItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,10 +64,7 @@ public class CartActivity extends AppCompatActivity {
     }
 
     private void generateQRCode() {
-
-        sp=getSharedPreferences("userId",MODE_PRIVATE);
-        int userId=sp.getInt("userId",MODE_PRIVATE);
-        cartWebservice.getCartId(userId).enqueue(new Callback<Long>() {
+        cartWebservice.getCartId(getUserId()).enqueue(new Callback<Long>() {
             @Override
             public void onResponse(Call<Long> call, Response<Long> response) {
                 long cartId;
@@ -97,21 +97,19 @@ public class CartActivity extends AppCompatActivity {
     }
 
     private void getCartItems() {
-        sp=getSharedPreferences("userId", MODE_PRIVATE);
-        int userId=sp.getInt("userId",MODE_PRIVATE);
-        cartWebservice.getCartProducts(userId).enqueue(new Callback<List<Product>>() {
+        cartWebservice.getCartProducts(getUserId()).enqueue(new Callback<List<Product>>() {
             @Override
             public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
-                List<Product> cart=new ArrayList<>();
+                cartItems = new ArrayList<>();
 
                 if(response.isSuccessful()){
-                    cart=response.body();
+                    cartItems=response.body();
                     float totalPrice = 0;
 
-                    for(Product product : cart ){
+                    for(Product product : cartItems ){
                         totalPrice+=product.getQuantity() * product.getPrice();
                     }
-                    adapter=new ProductListAdapter(CartActivity.this,cart);
+                    adapter=new ProductListAdapter(CartActivity.this,cartItems);
                     listViewProducts.setAdapter(adapter);
                     etTotalPrice.setText("Your total price is: " + totalPrice + " RON");
                 }
@@ -129,5 +127,43 @@ public class CartActivity extends AppCompatActivity {
         etTotalPrice = findViewById(R.id.etTotalPriceCart);
         listViewProducts=findViewById(R.id.listview_product);
         btnGenerateQRCode=findViewById(R.id.btnGenerateQRCode);
+
+        listViewProducts.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                AlertDialogDelete((int)cartItems.get(position).getProductId());
+                return true;
+            }
+        });
+    }
+
+    public void AlertDialogDelete(final int productId){
+        android.app.AlertDialog.Builder dialogBuilder = new android.app.AlertDialog.Builder(CartActivity.this);
+        dialogBuilder.setMessage("Do you want to delete this item?");
+        dialogBuilder.setCancelable(false);
+
+        dialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                adapter.DeleteCartItem(getUserId(), productId);
+                dialog.dismiss();
+            }
+        });
+
+        dialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.show();
+    }
+
+    private int getUserId(){
+        sp=getSharedPreferences("userId",MODE_PRIVATE);
+        int userId=sp.getInt("userId",MODE_PRIVATE);
+        return userId;
     }
 }

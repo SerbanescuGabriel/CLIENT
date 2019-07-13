@@ -192,4 +192,26 @@ public class ProductListAdapter extends BaseAdapter {
         AlertDialog alertDialog = dialogBuilder.create();
         alertDialog.show();
     }
+
+    public void DeleteCartItem(int userId, final int productId){
+        cartWebservice.Remove(userId, productId).enqueue(new Callback<Boolean>() {
+            @Override
+            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                int position = 0;
+
+                for(int i = 0; i<mProductList.size(); i++){
+                    if(mProductList.get(i).getProductId() == productId){
+                        position = i;
+                    }
+                }
+                mProductList.remove(position);
+                notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Call<Boolean> call, Throwable t) {
+
+            }
+        });
+    }
 }

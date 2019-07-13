@@ -32,4 +32,8 @@ public interface ICartWebservice {
     @POST("cart/substract")
     @FormUrlEncoded
     Call<Boolean> Minus(@Field("UserId") int userId, @Field("ProductId") int productId);
+
+    @POST("cart/remove")
+    @FormUrlEncoded
+    Call<Boolean> Remove(@Field("UserId") int userId, @Field("ProductId") int productId);
 }
