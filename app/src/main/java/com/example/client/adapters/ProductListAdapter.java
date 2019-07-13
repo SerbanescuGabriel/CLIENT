@@ -151,11 +151,7 @@ public class ProductListAdapter extends BaseAdapter {
 
                 if(response.isSuccessful()){
                     mProductList = response.body();
-                    float total = 0;
-                    for(Product product: mProductList){
-                        total+= product.getQuantity() * product.getPrice();
-                    }
-                    etPrice.setText("Your total price is: " + total + " RON");
+                    SetPrice();
                     notifyDataSetChanged();
                     progressDialog.cancel();
                 }
@@ -204,7 +200,9 @@ public class ProductListAdapter extends BaseAdapter {
                         position = i;
                     }
                 }
+
                 mProductList.remove(position);
+                SetPrice();
                 notifyDataSetChanged();
             }
 
@@ -213,5 +211,13 @@ public class ProductListAdapter extends BaseAdapter {
 
             }
         });
+    }
+
+    public void SetPrice(){
+        float total = 0;
+        for(Product product: mProductList){
+            total+= product.getQuantity() * product.getPrice();
+        }
+        etPrice.setText("Your total price is: " + total + " RON");
     }
 }
