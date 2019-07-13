@@ -1,6 +1,7 @@
 package com.example.client.activities;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
@@ -40,6 +41,7 @@ public class LoginActivity extends AppCompatActivity {
     private int id, idSP;
     private CheckBox cbKeepLoggedIn;
     SharedPreferences sp;
+    ProgressDialog progressDialog;
 
 
     @Override
@@ -53,6 +55,9 @@ public class LoginActivity extends AppCompatActivity {
         etUsername = findViewById(R.id.etUsername);
         etPassword = findViewById(R.id.etPassword);
         cbKeepLoggedIn = findViewById(R.id.cbKeepLoggedIn);
+        progressDialog = new ProgressDialog(LoginActivity.this);
+        progressDialog.setMessage("Loading...");
+
         userWebservice = RetrofitSingleton.getInstance().create(IUserWebservice.class);
 
         sp = getSharedPreferences("userId", MODE_PRIVATE);
@@ -73,6 +78,7 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progressDialog.show();
                 userWebservice.login(etUsername.getText().toString(), etPassword.getText().toString()).enqueue(new Callback<User>() {
                     @Override
                     public void onResponse(Call<User> call, Response<User> response) {
@@ -87,12 +93,13 @@ public class LoginActivity extends AppCompatActivity {
                             intent.putExtras(bundle);
                             startActivity(intent);
 
-                            if ((cbKeepLoggedIn.isChecked())) {
                                 SharedPreferences.Editor editor = sp.edit();
                                 id = (int) user.getUserId();
                                 editor.putInt("userId", id);
                                 editor.commit();
-                            }
+                                progressDialog.cancel();
+
+
                         } else {
                             if (response.code() == 400) {
                                 JSONObject jsonObject = null;
@@ -102,6 +109,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                     if (content.equals(Messages.Error_InvalidCredentials)) {
                                         Toast.makeText(getApplicationContext(), content, Toast.LENGTH_LONG).show();
+                                        progressDialog.cancel();
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();

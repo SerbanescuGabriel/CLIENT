@@ -36,14 +36,11 @@ import retrofit2.Response;
 
 public class CartActivity extends AppCompatActivity {
 
-    private TextView txtCart;
     private ICartWebservice cartWebservice;
     private ListView listViewProducts;
     private ListAdapter adapter;
     private Button btnGenerateQRCode;
     SharedPreferences sp;
-    private Dialog dialogQrCode;
-    private ImageView imgViewQRCode;
     private TextView etTotalPrice;
 
     @Override
@@ -117,7 +114,6 @@ public class CartActivity extends AppCompatActivity {
                     adapter=new ProductListAdapter(CartActivity.this,cart);
                     listViewProducts.setAdapter(adapter);
                     etTotalPrice.setText("Your total price is: " + totalPrice + " RON");
-                    //todo
                 }
 
             }

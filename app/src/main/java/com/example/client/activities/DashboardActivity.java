@@ -6,11 +6,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
+import android.text.TextPaint;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -83,7 +87,9 @@ public class DashboardActivity extends AppCompatActivity
         Bundle bundle = intent.getExtras();
         User user = (User) bundle.getSerializable("user");
         setUserDetails(user);
-        getWishListItems((int)user.getUserId());
+
+        sp = getSharedPreferences("userId", MODE_PRIVATE);
+        getWishListItems(sp.getInt("userId", MODE_PRIVATE));
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,12 +102,8 @@ public class DashboardActivity extends AppCompatActivity
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
-
         toggle.syncState();
-
         navigationView.setNavigationItemSelectedListener(this);
-
-
     }
 
     void setUserDetails(User user) {
@@ -116,25 +118,11 @@ public class DashboardActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-      /*  DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-        */
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.dashboard, menu);
-        /*btnCart=findViewById(R.id.action_cart);
-        btnCart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });*/
         return true;
     }
 
@@ -156,19 +144,7 @@ public class DashboardActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        } else if (id == R.id.nav_logout) {
+        if (id == R.id.nav_logout) {
             sp = getSharedPreferences("userId", MODE_PRIVATE);
             editor = sp.edit();
             editor.putInt("userId", 0);
@@ -204,27 +180,6 @@ public class DashboardActivity extends AppCompatActivity
                 Intent intent=new Intent(getApplicationContext(), BarcodeActivity.class);
                 intent.putExtra("barcode",result.getContents());
                 startActivity(intent);
-               // finish();
-                /*AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-                alertDialogBuilder.setMessage(result.getContents() + "\n\n Scan again?");
-                alertDialogBuilder.setTitle("Result Scanned!");
-                alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        scannow();
-                    }
-                });
-
-                alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        finish();
-                    }
-                });
-
-                AlertDialog alertDialog = alertDialogBuilder.create();
-                alertDialog.show();
-                */
             }
         }else {
             super.onActivityResult(requestCode, resultCode, data);
@@ -245,5 +200,13 @@ public class DashboardActivity extends AppCompatActivity
                 Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+
+        sp = getSharedPreferences("userId", MODE_PRIVATE);
+        getWishListItems(sp.getInt("userId", MODE_PRIVATE));
     }
 }

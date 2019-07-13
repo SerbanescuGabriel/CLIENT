@@ -1,9 +1,11 @@
 package com.example.client.adapters;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.arch.lifecycle.ViewModel;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +16,7 @@ import android.widget.Toast;
 
 import com.example.client.R;
 import com.example.client.activities.CartActivity;
+import com.example.client.activities.DashboardActivity;
 import com.example.client.entitymodels.product.Product;
 import com.example.client.webservices.ICartWebservice;
 import com.example.client.webservices.RetrofitSingleton;
@@ -127,7 +130,11 @@ public class ProductListAdapter extends BaseAdapter {
         cartWebservice.Minus(userId, productId).enqueue(new Callback<Boolean>() {
             @Override
             public void onResponse(Call<Boolean> call, Response<Boolean> response) {
-                getItems();
+                if(response.body()){
+                    getItems();
+                }else{
+                    AlertDialogDelete();
+                }
             }
 
             @Override
@@ -159,5 +166,30 @@ public class ProductListAdapter extends BaseAdapter {
                 //todo
             }
         });
+    }
+
+    public void AlertDialogDelete(){
+        android.app.AlertDialog.Builder dialogBuilder = new android.app.AlertDialog.Builder(mContext);
+        dialogBuilder.setMessage("Do you want to delete this item?");
+        dialogBuilder.setCancelable(false);
+
+        dialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                progressDialog.cancel();
+            }
+        });
+
+        dialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                progressDialog.cancel();
+            }
+        });
+
+        AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.show();
     }
 }

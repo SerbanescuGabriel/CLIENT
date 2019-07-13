@@ -8,18 +8,26 @@ import android.widget.TextView;
 
 import com.example.client.R;
 import com.example.client.entitymodels.product.Product;
+import com.example.client.webservices.IWishListWebService;
+import com.example.client.webservices.RetrofitSingleton;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class BrowseProductsAdapter extends BaseAdapter {
 
     private Context mContext;
     private List<Product> mList;
+    IWishListWebService wishListWebService;
 
     public BrowseProductsAdapter(Context mContext, List<Product> mList) {
         this.mContext = mContext;
         this.mList = mList;
+        wishListWebService = RetrofitSingleton.getInstance().create(IWishListWebService.class);
     }
 
     @Override
@@ -60,5 +68,19 @@ public class BrowseProductsAdapter extends BaseAdapter {
         mList = new ArrayList<Product>();
         mList = filteredList;
         notifyDataSetChanged();
+    }
+
+    public void UpdateDashboardWishListItems(int userId){
+        wishListWebService.getWishlistItems(userId).enqueue(new Callback<List<Product>>() {
+            @Override
+            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                mList = response.body();
+                notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Call<List<Product>> call, Throwable t) {
+            }
+        });
     }
 }
