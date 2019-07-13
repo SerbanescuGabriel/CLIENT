@@ -13,6 +13,7 @@ import com.example.client.R;
 import com.example.client.entitymodels.product.Product;
 import com.example.client.webservices.ICartWebservice;
 import com.example.client.webservices.IProductWebservice;
+import com.example.client.webservices.IWishListWebService;
 import com.example.client.webservices.RetrofitSingleton;
 
 import retrofit2.Call;
@@ -30,6 +31,7 @@ public class BarcodeActivity extends AppCompatActivity {
 
     private Product product;
     private SharedPreferences sp;
+    IWishListWebService wishListWebService;
 
 
     @Override
@@ -45,6 +47,7 @@ public class BarcodeActivity extends AppCompatActivity {
         bindControls();
         populateControls(barcode);
         setClicks();
+        wishListWebService = RetrofitSingleton.getInstance().create(IWishListWebService.class);
     }
 
      void populateControls(String barcode){
@@ -54,11 +57,8 @@ public class BarcodeActivity extends AppCompatActivity {
             public void onResponse(Call<Product> call, Response<Product> response) {
 
                 if(response.isSuccessful()){
-                    //am facut product global ca sa pot sa il accesez si in add2cart
-                     product=response.body();
+                    product=response.body();
                     txtProductName.setText(product.getProductName());
-                    //txtProductManufacturer.setText(product.getManufacturerName());
-                    //txtProductCategory.setText(product.getCategoryName());
                     txtPrice.setText(Float.toString(product.getPrice()));
                 }
             }
@@ -73,8 +73,6 @@ public class BarcodeActivity extends AppCompatActivity {
 
      void bindControls(){
         txtProductName=findViewById(R.id.txtProductName);
-        //txtProductManufacturer=findViewById(R.id.txtManufacturerName);
-        //txtProductCategory=findViewById(R.id.txtCategoryName);
         txtPrice=findViewById(R.id.txtPrice);
         btnAddToCart=findViewById(R.id.btnAddToCart);
         btnCancel=findViewById(R.id.btnCancel);
@@ -87,18 +85,24 @@ public class BarcodeActivity extends AppCompatActivity {
          btnAddToCart.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View v) {
-                 int userId;
                  long idProduct=product.getProductId();
-                 sp=getSharedPreferences("userId", MODE_PRIVATE);
-                 userId=sp.getInt("userId",MODE_PRIVATE);
                  int quantity = Integer.parseInt(txtQtty.getText().toString());
-                 cartWebservice.addItemToCart(userId, idProduct, quantity).enqueue(new Callback<Boolean>() {
+                 cartWebservice.addItemToCart(getUserId(), idProduct, quantity).enqueue(new Callback<Boolean>() {
                      @Override
                      public void onResponse(Call<Boolean> call, Response<Boolean> response) {
                          if(response.body()){
-                             Toast.makeText(getApplicationContext(),"item added to cart",Toast.LENGTH_LONG).show();
-                             finish();
+                             wishListWebService.removeItemFromWishlist(getUserId(), (int)product.getProductId()).enqueue(new Callback<Boolean>() {
+                                 @Override
+                                 public void onResponse(Call<Boolean> call, Response<Boolean> response) {
 
+                                 }
+
+                                 @Override
+                                 public void onFailure(Call<Boolean> call, Throwable t) {
+
+                                 }
+                             });
+                             finish();
                          }
                      }
 
@@ -129,4 +133,8 @@ public class BarcodeActivity extends AppCompatActivity {
          });
      }
 
+     private int getUserId(){
+         sp=getSharedPreferences("userId", MODE_PRIVATE);
+         return sp.getInt("userId",MODE_PRIVATE);
+     }
 }
