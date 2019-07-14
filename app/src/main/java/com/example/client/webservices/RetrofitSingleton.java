@@ -1,7 +1,10 @@
 package com.example.client.webservices;
 
+import com.example.client.serializers.DateDeserializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
+import java.util.Date;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -18,8 +21,11 @@ public class RetrofitSingleton {
     public static synchronized Retrofit getInstance(){
         if(instance == null){
             Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(Date.class, new DateDeserializer())
                     .setLenient()
                     .create();
+
+
 
             instance = new Retrofit.Builder()
                     .baseUrl(BASE_URL)

@@ -191,6 +191,10 @@ public class DashboardActivity extends AppCompatActivity
             Intent intent = new Intent(DashboardActivity.this, BrowseProducsActivity.class);
             startActivity(intent);
         }
+        else if(id == R.id.purchase_history){
+            Intent intent = new Intent(DashboardActivity.this, PurchaseHistoryActivity.class);
+            startActivity(intent);
+        }
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

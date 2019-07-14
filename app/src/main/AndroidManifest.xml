@@ -12,7 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activities.BrowseProducsActivity"></activity>
+        <activity android:name=".activities.PurchaseHistoryItemsActivity"></activity>
+        <activity android:name=".activities.PurchaseHistoryActivity" />
+        <activity android:name=".activities.BrowseProducsActivity" />
         <activity android:name=".activities.CartActivity" />
         <activity android:name=".activities.BarcodeActivity" />
         <activity

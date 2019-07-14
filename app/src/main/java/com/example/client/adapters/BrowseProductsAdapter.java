@@ -50,13 +50,9 @@ public class BrowseProductsAdapter extends BaseAdapter {
 
         View v=View.inflate(mContext, R.layout.item_browse_product_list,null);
         TextView txtProductName=v.findViewById(R.id.txtProductNameBP);
-        //TextView txtManufacturerName=v.findViewById(R.id.txtManufacturerNameBP);
-        //TextView txtCategoryName=v.findViewById(R.id.txtCategoryNameBP);
         TextView txtPrice=v.findViewById(R.id.txtPriceBP);
 
         txtProductName.setText(mList.get(position).getProductName());
-        //txtManufacturerName.setText(mList.get(position).getManufacturerName());
-        //txtCategoryName.setText(mList.get(position).getCategoryName());
         txtPrice.setText("Price: " + String.valueOf(mList.get(position).getPrice()) + " RON");
 
         v.setTag(mList.get(position).getProductId());

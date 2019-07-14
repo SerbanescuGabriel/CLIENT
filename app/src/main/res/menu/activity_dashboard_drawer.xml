@@ -9,6 +9,10 @@
             android:icon="@drawable/ic_browse_products_24dp"
             android:title="Browse Products" />
         <item
+            android:id="@+id/purchase_history"
+            android:icon="@drawable/ic_shopping_cart_black_24dp"
+            android:title="Purchase History"></item>
+        <item
             android:id="@+id/nav_logout"
             android:icon="@drawable/ic_exit_to_app_black_24dp"
             android:title="Logout"/>

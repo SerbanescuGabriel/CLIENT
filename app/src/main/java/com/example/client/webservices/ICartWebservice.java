@@ -1,5 +1,6 @@
 package com.example.client.webservices;
 
+import com.example.client.entitymodels.cart.Cart;
 import com.example.client.entitymodels.product.Product;
 
 import java.util.List;
@@ -36,4 +37,10 @@ public interface ICartWebservice {
     @POST("cart/remove")
     @FormUrlEncoded
     Call<Boolean> Remove(@Field("UserId") int userId, @Field("ProductId") int productId);
+
+    @GET("cart/history/{userId}")
+    Call<List<Cart>> GetPurchaseHistory(@Path("userId")int userId);
+
+    @GET("cart/items/{cartId}")
+    Call<List<Product>> GetCartItemsByCartId(@Path("cartId")int cartId);
 }
